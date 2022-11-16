@@ -24,9 +24,9 @@
     margin: 0;
     margin-top: 36px;
     color: $dark-blue;
-    text-align: left;
+    text-align: center;
 
-    @include desktop {
+    @include tablet {
       text-align: left;
     }
   }
@@ -40,9 +40,9 @@
     margin-bottom: 36px;
     font-weight: 300;
     color: $cool-blue;
-    text-align: left;
+    text-align: center;
 
-    @include desktop {
+    @include tablet {
       text-align: left;
     }
   }

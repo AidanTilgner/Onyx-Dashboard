@@ -42,6 +42,19 @@
         <i class="material-symbols-outlined">bolt</i>
         <p>Actions</p>
       </div>
+
+      {#if !isMobile()}
+        <div
+          on:click={() => {
+            navigateLink("/chat");
+            if (isMobile()) visible = false;
+          }}
+          class="nav-item {$currentPath === '/chat' && 'active'}"
+        >
+          <i class="material-symbols-outlined">chat</i>
+          <p>Chat</p>
+        </div>
+      {/if}
       <!-- <div
       on:click={() => navigateLink("/graphics")}
       class="nav-item {$currentPath === '/graphics' && 'active'}"
@@ -152,7 +165,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-start;
 
     @include tablet {
       width: 300px;
@@ -161,6 +174,7 @@
       left: 0;
       bottom: 0;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      justify-content: center;
     }
 
     @include desktop {
@@ -178,6 +192,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     margin-top: 36px;
     margin-bottom: 82px;
   }
@@ -185,6 +200,7 @@
     margin-top: 36px;
     padding: 24px 0;
     border-top: 1px solid #eaeaea;
+    width: 100%;
   }
 
   .nav-section:last-child {

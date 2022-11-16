@@ -22,6 +22,8 @@
   import Login from "./pages/Login.svelte";
   import Actions from "./pages/Actions.svelte";
   import Settings from "./pages/Settings.svelte";
+  import Chat from "./pages/Chat.svelte";
+  import ChatButton from "./lib/components/Chat/Chat.svelte";
   export let url;
 
   const initialized = initSocket();
@@ -31,6 +33,7 @@
     const authed = await checkAuth();
     console.log("authed", authed);
     if (!authed) {
+      console.log("not authed");
       navigate("/login");
     }
   })();
@@ -76,11 +79,13 @@
           <Route path="/robots" component={Robots} />
           <Route path="/actions" component={Actions} />
           <Route path="/settings" component={Settings} />
+          <Route path="/chat" component={Chat} />
           <Route path="*" component={Home} />
         </Router>
         <SideBar />
         <Console />
         <VoiceInput />
+        <ChatButton />
       </div>
     </Route>
   </Router>

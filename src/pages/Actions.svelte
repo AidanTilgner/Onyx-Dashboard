@@ -19,9 +19,11 @@
 
   const ignoreActions = new Set(["exception", "parse_and_use_nlu"]);
 
-  $: actionNames = Object.keys(actions).filter((name) => {
-    return !ignoreActions.has(name);
-  });
+  $: actionNames =
+    actions &&
+    Object.keys(actions).filter((name) => {
+      return !ignoreActions.has(name);
+    });
 
   const formatName = (name) => {
     // uppercase each word

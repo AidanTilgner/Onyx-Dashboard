@@ -8,6 +8,11 @@ const router = Router();
 
 router.post("/check", async (req, res) => {
   try {
+    // // ! Remove this
+    // return res.send({
+    //   message: "Authorized",
+    //   authorized: true,
+    // });
     const token = req.body.token;
     const response = await peopleServer
       .post("/auth/check", {
@@ -17,6 +22,12 @@ router.post("/check", async (req, res) => {
         return data;
       })
       .catch((err) => {
+        if (err.response.status === 401) {
+          return {
+            authorized: false,
+            message: "Unauthorized",
+          };
+        }
         return {
           error: err,
           message: "There was an error authenticating",
@@ -39,7 +50,7 @@ router.post("/check", async (req, res) => {
 
     return res.status(200).send({
       message: "Authorized",
-      authorized: true,
+      validated: true,
     });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
