@@ -16,13 +16,15 @@
 
   const addResponse = (text) => {
     if (!text) return;
-    messages = [
-      ...messages,
-      {
-        type: "to",
-        message: text,
-      },
-    ];
+    setTimeout(() => {
+      messages = [
+        ...messages,
+        {
+          type: "to",
+          message: text,
+        },
+      ];
+    }, 1000);
   };
 
   const addChatHistoryToSession = () => {
@@ -39,10 +41,11 @@
   const submitMessage = async (message) => {
     addMessage(message);
     const session_id = sessionStorage.getItem("session_id");
-    const response = await fetch("/contact/chat.json", {
+    const response = await fetch("/api/proxy/nlu/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
       body: JSON.stringify({
         message,
@@ -55,12 +58,12 @@
       .catch((err) => {
         console.error(err);
         return {
-          answer:
+          response:
             "Sorry, I'm having trouble understanding you. Please try again later.",
         };
       });
 
-    addResponse(response.answer);
+    addResponse(response.response);
   };
 
   const generateRandomSessionID = () => {

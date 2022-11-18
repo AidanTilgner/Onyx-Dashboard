@@ -174,6 +174,22 @@ router.post("/nlu/test", async (req, res) => {
   }
 });
 
+router.post("/nlu/chat", async (req, res) => {
+  try {
+    const response = await interpretationServer.post("/chat", req.body, {
+      headers: {
+        // Authorization: req.headers["Authorization"] as string,
+      },
+    });
+    return res.send(response.data);
+  } catch (err) {
+    console.error("Error: ", err);
+    return res.send({
+      error: err,
+    });
+  }
+});
+
 export default router;
 
 const destinations: { [key: string]: string | undefined } = {
