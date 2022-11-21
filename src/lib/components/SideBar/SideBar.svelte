@@ -42,19 +42,6 @@
         <i class="material-symbols-outlined">bolt</i>
         <p>Actions</p>
       </div>
-
-      {#if !isMobile()}
-        <div
-          on:click={() => {
-            navigateLink("/chat");
-            if (isMobile()) visible = false;
-          }}
-          class="nav-item {$currentPath === '/chat' && 'active'}"
-        >
-          <i class="material-symbols-outlined">chat</i>
-          <p>Chat</p>
-        </div>
-      {/if}
       <!-- <div
       on:click={() => navigateLink("/graphics")}
       class="nav-item {$currentPath === '/graphics' && 'active'}"
@@ -92,6 +79,18 @@
     </div> -->
     </div>
     <div class="nav-section">
+      {#if !isMobile()}
+        <div
+          on:click={() => {
+            navigateLink("/chat");
+            if (isMobile()) visible = false;
+          }}
+          class="nav-item {$currentPath === '/chat' && 'active'}"
+        >
+          <i class="material-symbols-outlined">chat</i>
+          <p>Chat</p>
+        </div>
+      {/if}
       <div
         on:click={() => {
           navigateLink("/settings");

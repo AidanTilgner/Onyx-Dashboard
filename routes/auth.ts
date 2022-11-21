@@ -22,6 +22,7 @@ router.post("/check", async (req, res) => {
         return data;
       })
       .catch((err) => {
+        console.error("Error: ", err);
         if (err.response.status === 401) {
           return {
             authorized: false,
@@ -53,6 +54,7 @@ router.post("/check", async (req, res) => {
       validated: true,
     });
   } catch (err) {
+    console.error("Error: ", err);
     res.status(500).json({ message: "Internal server error" });
   }
 });

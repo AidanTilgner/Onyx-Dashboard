@@ -20,6 +20,7 @@
     flex-direction: column;
     align-items: flex-start;
     margin: 24px 0;
+    box-sizing: border-box;
 
     &.from {
       align-items: flex-end;

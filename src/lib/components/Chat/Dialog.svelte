@@ -16,15 +16,13 @@
 
   const addResponse = (text) => {
     if (!text) return;
-    setTimeout(() => {
-      messages = [
-        ...messages,
-        {
-          type: "to",
-          message: text,
-        },
-      ];
-    }, 1000);
+    messages = [
+      ...messages,
+      {
+        type: "to",
+        message: text,
+      },
+    ];
   };
 
   const addChatHistoryToSession = () => {
