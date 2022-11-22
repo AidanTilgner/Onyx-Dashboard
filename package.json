@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "rollup -c && ts-node index.ts",
     "dev": "concurrently \"ts-node-dev index.ts\" \"rollup -c -w\"",
     "build": "rollup -c",
     "build:dev": "rollup -c -w"
