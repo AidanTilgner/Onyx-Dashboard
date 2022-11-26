@@ -71,9 +71,12 @@
   }
 
   .login-modal {
-    width: 40vw;
+    width: 90vw;
     box-shadow: 0.2px 0.2px 10px 0 rgba($color: #000000, $alpha: 0.15);
 
+    @include tablet {
+      width: 50vw;
+    }
     &-header {
       display: flex;
       justify-content: space-between;
