@@ -160,11 +160,6 @@
     background-color: transparent;
     box-sizing: border-box;
     overflow: hidden;
-
-    body {
-      overflow: hidden;
-      height: 100vh;
-    }
   }
 
   .dialog {

@@ -1,9 +1,7 @@
 import { Router } from "express";
-import axios from "axios";
 import { actionServer, interpretationServer } from "../utils/axios";
 import { config } from "dotenv";
 import multer from "multer";
-import FormData from "form-data";
 import { globalLog } from "../utils/logger";
 
 config();
@@ -13,45 +11,26 @@ const upload = multer({
   storage: multer.memoryStorage(),
 });
 
-// This needs to be able to get all of the files in the request and add them to the next form data request
-router.post("/package", upload.any(), (req, res) => {
-  const { initial } = req.body;
-  const pkg = JSON.parse(req.body.pkg);
-  const files = req.files as Express.Multer.File[];
+const getTokenFromRequest = (req: any) => {
+  const useToken: string =
+    (req.query.token as string) ||
+    (req.headers["x-access-token"] as string) ||
+    (req.headers["authorization"]?.split(" ")[1] as string);
 
-  const form = new FormData();
-  form.append("pkg", JSON.stringify(mapDestinations(pkg)));
-  // append files to form
-  if (files) {
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i] as Express.Multer.File;
-      form.append(file.fieldname, file.buffer, {
-        filename: file.originalname,
-        contentType: file.mimetype,
-      });
-    }
-  }
+  const found = useToken
+    ? useToken
+    : process.env.NODE_ENV === "development"
+    ? "testing"
+    : "";
 
-  axios
-    .post(`${destinations[initial]}/package-hook`, form, {
-      headers: form.getHeaders(),
-    })
-    .then((response) => {
-      return res.send(response.data);
-    })
-    .catch((err) => {
-      globalLog("Error posting package: ", err);
-      return res.status(500).send(err);
-    });
-});
+  return found;
+};
 
 router.get("/actions", async (req, res) => {
   try {
     const response = await actionServer.get("/actions", {
       headers: {
-        "x-access-token":
-          (req.headers["x-access-token"] as string) ||
-          (req.headers["Authorization"] as string).split(" ")[1],
+        "x-access-token": getTokenFromRequest(req),
       },
     });
     return res.send(response.data);
@@ -67,9 +46,7 @@ router.get("/recent-actions", async (req, res) => {
   try {
     const response = await actionServer.get("/actions/recent", {
       headers: {
-        "x-access-token":
-          (req.headers["x-access-token"] as string) ||
-          (req.headers["Authorization"] as string).split(" ")[1],
+        "x-access-token": getTokenFromRequest(req),
       },
     });
     return res.send(response.data);
@@ -85,9 +62,7 @@ router.get("/actions/:action", async (req, res) => {
   try {
     const response = await actionServer.get(`/actions/${req.params.action}`, {
       headers: {
-        "x-access-token":
-          (req.headers["x-access-token"] as string) ||
-          (req.headers["Authorization"] as string).split(" ")[1],
+        "x-access-token": getTokenFromRequest(req),
       },
     });
     return res.send(response.data);
@@ -101,13 +76,15 @@ router.get("/actions/:action", async (req, res) => {
 
 router.post("/actions/:action", async (req, res) => {
   try {
-    const response = await actionServer.post(`/actions/${req.params.action}`, {
-      headers: {
-        "x-access-token":
-          (req.headers["x-access-token"] as string) ||
-          (req.headers["Authorization"] as string).split(" ")[1],
-      },
-    });
+    const response = await actionServer.post(
+      `/actions/${req.params.action}`,
+      {},
+      {
+        headers: {
+          "x-access-token": getTokenFromRequest(req),
+        },
+      }
+    );
     return res.send(response.data);
   } catch (err) {
     console.error("Error: ", err);
@@ -123,9 +100,7 @@ router.get("/actions/metadata/:action", async (req, res) => {
       `/actions/metadata/${req.params.action}`,
       {
         headers: {
-          "x-access-token":
-            (req.headers["x-access-token"] as string) ||
-            (req.headers["Authorization"] as string).split(" ")[1],
+          "x-access-token": getTokenFromRequest(req),
         },
       }
     );
@@ -141,11 +116,9 @@ router.get("/actions/metadata/:action", async (req, res) => {
 
 router.post("/nlu", async (req, res) => {
   try {
-    const response = await interpretationServer.post("/nlu", req.body, {
+    const response: any = await interpretationServer.post("/nlu", req.body, {
       headers: {
-        "x-access-token":
-          (req.headers["x-access-token"] as string) ||
-          (req.headers["Authorization"] as string).split(" ")[1],
+        "x-access-token": getTokenFromRequest(req),
       },
     });
     return res.send(response.data);
@@ -160,9 +133,7 @@ router.post("/nlu/test", async (req, res) => {
     const response = await interpretationServer.post("/nlu", req.body, {
       timeout: 5000,
       headers: {
-        "x-access-token":
-          (req.headers["x-access-token"] as string) ||
-          (req.headers["Authorization"] as string).split(" ")[1],
+        "x-access-token": getTokenFromRequest(req),
       },
     });
     return res.send(response.data);
@@ -178,9 +149,7 @@ router.post("/nlu/chat", async (req, res) => {
   try {
     const response = await interpretationServer.post("/chat", req.body, {
       headers: {
-        "x-access-token":
-          (req.headers["x-access-token"] as string) ||
-          (req.headers["Authorization"] as string).split(" ")[1],
+        "x-access-token": getTokenFromRequest(req),
       },
     });
     return res.send(response.data);
@@ -199,28 +168,4 @@ const destinations: { [key: string]: string | undefined } = {
   SPEECH: process.env.SPEECH_SERVER_HOST,
   APPLICATIONS: process.env.APPLICATIONS_SERVER_HOST,
   INTERPRETATION: process.env.INTERPRETATION_SERVER_HOST,
-};
-
-const mapDestinations = (pkg: {
-  steps: {
-    [key: string | number]: {
-      next: string;
-    };
-  };
-}) => {
-  const steps = Object.keys(pkg.steps);
-  const newSteps: { [key: string | number]: { next: string | undefined } } = {};
-  steps.forEach((step) => {
-    const next = pkg.steps[step].next;
-    const destination = destinations[next];
-    newSteps[step] = {
-      ...pkg.steps[step],
-      next: destination || "",
-    };
-  });
-
-  return {
-    ...pkg,
-    steps: newSteps,
-  };
 };

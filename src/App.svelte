@@ -31,9 +31,7 @@
   let unsub;
   (async () => {
     const authed = await checkAuth();
-    console.log("authed", authed);
     if (!authed) {
-      console.log("not authed");
       navigate("/login");
     }
   })();

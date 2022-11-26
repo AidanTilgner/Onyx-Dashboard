@@ -24,7 +24,7 @@ export const initSocket = async () => {
         return;
       }
       io.on("connect", () => {
-        console.log("connected");
+        console.info("connected to socket");
       });
       io.on("message", (message) => {
         messages.update((messages) => [...messages, message]);

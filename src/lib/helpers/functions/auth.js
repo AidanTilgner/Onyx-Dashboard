@@ -135,7 +135,6 @@ export const refreshUser = async () => {
           },
         };
       });
-    console.log("Refreshed", res);
     const {
       data: { error, message },
     } = res;
