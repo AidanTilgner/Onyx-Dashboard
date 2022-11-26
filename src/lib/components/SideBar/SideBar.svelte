@@ -221,6 +221,7 @@
     border-radius: 0 8px 8px 0;
     cursor: pointer;
     margin-bottom: 18px;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       outline: 1px solid rgba($color: $dark-blue, $alpha: 0.15);

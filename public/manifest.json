@@ -1,0 +1,23 @@
+{
+  "name": "Onyx Dashboard",
+  "short_name": "Onyx",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "description": "A dashboard for Onyx",
+  "icons": [
+    {
+      "src": "icons/small.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icons/medium.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "icons/large.png",
+      "sizes": "192x192"
+    }
+  ]
+}

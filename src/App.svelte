@@ -82,7 +82,7 @@
         </Router>
         <SideBar />
         <Console />
-        <VoiceInput />
+        <!-- <VoiceInput /> -->
         <ChatButton />
       </div>
     </Route>
