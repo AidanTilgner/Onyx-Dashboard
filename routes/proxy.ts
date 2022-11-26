@@ -119,7 +119,7 @@ router.post("/actions/:action", async (req, res) => {
 
 router.get("/actions/metadata/:action", async (req, res) => {
   try {
-    const response = await actionServer.get(
+    const response: any = await actionServer.get(
       `/actions/metadata/${req.params.action}`,
       {
         headers: {
@@ -178,7 +178,9 @@ router.post("/nlu/chat", async (req, res) => {
   try {
     const response = await interpretationServer.post("/chat", req.body, {
       headers: {
-        // Authorization: req.headers["Authorization"] as string,
+        "x-access-token":
+          (req.headers["x-access-token"] as string) ||
+          (req.headers["Authorization"] as string).split(" ")[1],
       },
     });
     return res.send(response.data);
