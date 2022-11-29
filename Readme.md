@@ -1,5 +1,4 @@
-# Onyx Applications Server
-
-## Summary
-
-The Onyx Applications server is going to act as both the main dashboard for the system, and as a REST API entry point for the system. An application that connects to Onyx will be able to access the main functions of the system through this server. Although an application may choose to use another server for a specific purpose, general purpose requests that utilize the Onyx system as a whole, will usually want to go through here.
+# Onyx Dashboard
+This is a dashboard application for primary interaction with the [Onyx Core](https://github.com/AidanTilgner/Onyx-Core) system.
+The idea is that this will be like a Google Assistant screen or something, where you can easily manage your Onyx assistant and such.
+It should also be a fully functional PWA.
